@@ -1,0 +1,40 @@
+<div class="form-group col-md-12 mb-2">
+    <input #myInput type="text" class="form-control form-control-lg form-control-a" placeholder="Search"
+        (keyup.enter)="(myInput.value)">
+    <!-- <div *ngIf="userId <= 0" class="col-md-12 col-lg-4"> -->
+        <button (click)="doSearch(myInput.value)" type="button"
+            class="btn btn-b-n navbar-toggle-box-collapse d-none d-md-block ml-2" data-toggle="collapse"
+            data-target="#navbarTogglerDemo01" aria-expanded="false" title="Search">
+            <span class="fa fa-search" aria-hidden="true"></span>
+        </button>
+    <!-- </div> -->
+    <!-- <div *ngIf="userId >= 1" class="col-md-12 col-lg-4">
+        <button (click)="doSearchByLandlordPropertyName(myInput.value)" type="button"
+            class="btn btn-b-n navbar-toggle-box-collapse d-none d-md-block ml-2" data-toggle="collapse"
+            data-target="#navbarTogglerDemo01" aria-expanded="false" title="Searching with Landlord">
+            <span class="fa fa-search" aria-hidden="true"></span>
+        </button>
+    </div> -->
+</div>
+
+<!-- <div class="form-group col-md-3 mb-2">
+
+    <input #myInput type="text" 
+           placeholder="Search for Property . . ."
+           class="au-input au-input-xl"
+           (keyup.enter)="(myInput.value)"  />
+
+    <button (click)="(myInput.value)" class="au-btn-submit">
+        Search
+    </button> -->
+
+<!--<input #myInput type="text" 
+           placeholder="Search for products ..."
+           class="au-input au-input-xl"
+           (keyup.enter)="doSearch(myInput.value)"  />
+
+    <button (click)="doSearch(myInput.value)" class="au-btn-submit">
+        Search
+    </button>-->
+
+<!-- </div> -->

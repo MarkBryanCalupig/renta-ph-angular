@@ -1,0 +1,344 @@
+<!--/ Intro Single star /-->
+<section class="intro-single">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-lg-8">
+        <div class="title-single-box">
+          <h1 class="title-single">{{pageTitle}}</h1>
+          <div *ngIf="userId == 0">
+          <span class="color-text-a">Grid Properties </span>
+          </div>
+          <div *ngIf="userId != 0">
+           <span> <b>Montly Income </b> {{landlorStatistics.montlyIncome | currency:'PHP'}}</span> 
+           <span> <b> &nbsp;&nbsp;Properties </b> {{landlorStatistics.totalProperties}}</span> 
+           <span> <b> &nbsp;&nbsp;Available </b> {{landlorStatistics.totalAvailable}}</span> 
+           <span> <b> &nbsp;&nbsp;Unavailable </b> {{landlorStatistics.totalUnavailable}}</span> 
+          </div>
+        </div>
+
+
+      </div>
+
+      <!-- 
+      Montly Income
+      Properties
+      Available
+      Unavailable -->
+
+      <div *ngIf="userId != 0" class="col-md-12 col-lg-4">
+        <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item h4 ml-2">
+              <a href="#" data-toggle="modal" data-target="#addModal" (click)="onOpenModal(null, 'add')">Add Property</a>
+            </li>
+            <li class="breadcrumb-item h4 ml-2">
+              <a href="#">Inquiries</a>
+            </li>
+          </ol>
+        </nav>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!--/ Intro Single End /-->
+
+
+<!--/ Property Grid Star /-->
+<section class="property-grid grid">
+  <div class="container" id="main-container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="grid-option">
+          <form>
+            <!--<label for="Type ml-1px">Type&nbsp;</label>  
+                <select class="custom-select">
+                  <option selected>All</option>
+                  <option value="1">Condominium</option>
+                  <option value="2">House</option>
+                  <option value="3">Room</option>
+                </select>-->
+          </form>
+        </div>
+      </div>
+
+      <div *ngFor="let tempProperty of properties" class="col-md-4">
+        <div *ngIf=" userId > 0">
+
+          <div class="float-right flex-column btn-group btn-group-sm mt-2 mr-2 ml-2">
+            <div *ngIf="tempProperty.availability == 1">
+              <a class="btn btn-b-n tooltips mb-2" data-placement="top" data-toggle="makeUnavailable"
+                (click)="changePropertyAvailability(tempProperty.id, 0)">
+                <i data-toggle="tooltip" class="fa fa-toggle-on" title="Make Unavailable"></i>
+              </a>
+            </div>
+            <div *ngIf="tempProperty.availability == 0">
+              <a class="btn btn-b-n tooltips mb-2" data-placement="top" data-toggle="makeAvailable"
+                (click)="changePropertyAvailability(tempProperty.id,1)">
+                <i data-toggle="tooltip" class="fa fa-toggle-off" title="Make Available"></i>
+              </a>
+            </div>
+            <a class="btn btn-b-n tooltips mb-2" data-toggle="modal" (click)="onOpenModal(tempProperty.id, 'edit')">
+              <i class="fa fa-pencil" data-toggle="tooltip" title="Edit"></i>
+            </a>
+            <a class="btn btn-secondary tooltips mb-2" data-toggle="modal"
+              (click)="onOpenModal(tempProperty.id, 'delete')">
+              <i class="fa fa-times" data-toggle="tooltip" title="Delete"></i>
+            </a>
+          </div>
+        </div>
+        <div class="card-box-a card-shadow">
+          <div class="img-box-a">
+            <img src="{{tempProperty.imageUrl}}" alt="" class="img-a img-fluid">
+          </div>
+          <div class="card-overlay">
+
+            <div class="card-overlay-a-content">
+              <div class="card-header-a">
+                <h2 class="card-title-a">
+                  <a routerLink="/property/{{tempProperty.id}}"
+                    routerLinkActive="active-link">{{tempProperty.propertyName}}</a>
+                </h2>
+              </div>
+              <div class="card-body-a">
+                <div class="price-box d-flex">
+                  <span class="price-a">rent | {{tempProperty.price | currency:'PHP'}}/month</span>
+                </div>
+                <a class="link-a" routerLink="/properties/{{tempProperty.id}}" routerLinkActive="active-link">Click here
+                  to view
+                  <span class="ion-ios-arrow-forward"></span>
+                </a>
+              </div>
+              <div class="card-footer-a">
+                <ul class="card-info d-flex justify-content-around">
+                  <li>
+                    <h4 class="card-info-title">Area</h4>
+                    <span>{{tempProperty.areaInFeet}} ft
+                      <sup>2</sup>
+                    </span>
+                  </li>
+                  <li>
+                    <h4 class="card-info-title">Beds</h4>
+                    <span>{{tempProperty.bedCapacity}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- if products empty then display a message-->
+      <div *ngIf="properties?.length == 0" class="alert alert-warning col-md-12" role="alert">
+        No properties found.
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+
+      <!--Including the pagination control.-->
+      <div class="footer-pagination">
+        <div class="row">
+          <div class="col-md-6"></div>
+
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-md-9" style="padding-left: 30%">
+                <nav class="pagination-a">
+                  <ngb-pagination [(page)]="thePageNumber" [pageSize]="thePageSize" [collectionSize]="theTotalElements"
+                    [boundaryLinks]="true" (pageChange)="listProperties()">
+                  </ngb-pagination>
+                </nav>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <nav class="pagination-a">
+      </nav>
+
+      <!-- end footer -->
+    </div>
+  </div>
+
+
+  <!-- Forms Modal HTML -->
+  <div id="formModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div *ngIf="mode == 'add'">
+            <h4 class="modal-title">Add Property</h4>
+          </div>
+          <div *ngIf="mode == 'edit'">
+            <h4 class="modal-title">Edit Property</h4>
+          </div>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+
+        <form #propertyForm="ngForm">
+          <div class="modal-body">
+
+            <div class="form-group">
+              <label for="propertyName">Property Name (*)</label>
+              <input type="text" [(ngModel)]="property.propertyName" name="propertyName" id="propertyName"
+                class="form-control" maxlength="70" minlength="5" required #propertyName="ngModel">
+
+              <div *ngIf="propertyName.invalid && (propertyName.dirty || propertyName.touched)" class="alert">
+                <div *ngIf="propertyName.errors?.['required']" style="color :red;"> Name is required. </div>
+                <div *ngIf="propertyName.errors?.['minlength']" style="color :red;"> Name must be at least 5 characters long. </div>
+                <div *ngIf="propertyName.errors?.['maxlength']" style="color :red;"> Name can only contains 70 characters long. </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="propertyType">Property Type (*)</label>
+              <select [(ngModel)]="property.propertyType" name="propertyType" id="propertyType" class="form-control"
+                required #propertyType="ngModel">
+                <option value="House" selected="selected">House</option>
+                <option value="Room">Room</option>
+                <option value="Condominium">Condominium</option>
+              </select>
+              <div *ngIf="propertyType.invalid && (propertyType.dirty || propertyType.touched)" class="alert">
+                <div *ngIf="propertyType.errors?.['required']" style="color :red;"> Property Type is required. </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="imageUrl">Image Url (*)</label>
+              <input type="text" [(ngModel)]="property.imageUrl" name="imageUrl" id="imageUrl" class="form-control"
+                maxlength="100" minlength="5" required #imageUrl="ngModel">
+
+              <div *ngIf="imageUrl.invalid && (imageUrl.dirty || imageUrl.touched)" class="alert">
+                <div *ngIf="imageUrl.errors?.['required']" style="color :red;"> Image Url is required. </div>
+                <div *ngIf="imageUrl.errors?.['minlength']" style="color :red;"> Image Url must be at least 5 characters long. </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="propertyAddress">Property Address (*)</label>
+              <textarea type="text" [(ngModel)]="property.propertyAddress" name="propertyAddress" id="propertyAddress"
+                class="form-control" maxlength="250" minlength="10" required #propertyAddress="ngModel"></textarea>
+              <input type="hidden" [(ngModel)]="property.propertyAddress" name="propertyAddress" id="propertyAddress"
+                class="form-control" maxlength="250" minlength="10" required #propertyAddress="ngModel">
+              <div *ngIf="propertyAddress.invalid && (propertyAddress.dirty || propertyAddress.touched)" class="alert">
+                <div *ngIf="propertyAddress.errors?.['required']" style="color :red;"> Address is required. </div>
+                <div *ngIf="propertyAddress.errors?.['minlength']" style="color :red;"> Address must be at least 10 characters long. </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="areaInFeet">Area In Feet (*)</label>
+              <input type="number" [(ngModel)]="property.areaInFeet" name="areaInFeet" id="areaInFeet"
+                class="form-control" max="5000" min="10" required #areaInFeet="ngModel">
+
+              <div *ngIf="areaInFeet.invalid && (areaInFeet.dirty || areaInFeet.touched)" class="alert">
+                <div *ngIf="areaInFeet.errors?.['required']" style="color :red;"> Area is required. </div>
+                <div *ngIf="areaInFeet.errors?.['min']" style="color :red;"> Area must be at least 10ft in area. </div>
+                <div *ngIf="areaInFeet.errors?.['max']" style="color :red;"> Area must be not exceed 5000ft in area. </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="bedCapacity">Bed Capacity (*)</label>
+              <input type="number" [(ngModel)]="property.bedCapacity" name="bedCapacity" id="bedCapacity"
+                class="form-control" max="50" min="1" required #bedCapacity="ngModel">
+              <div *ngIf="bedCapacity.invalid && (bedCapacity.dirty || bedCapacity.touched)" class="alert">
+                <div *ngIf="bedCapacity.errors?.['required']" style="color :red;"> Bed Capacity is required. </div>
+                <div *ngIf="bedCapacity.errors?.['min']" style="color :red;"> Bed Capacity must be at least 1. </div>
+                <div *ngIf="bedCapacity.errors?.['max']" style="color :red;"> Bed Capacity must be not exceed 50. </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="price">Price (*)</label>
+              <input type="number" [(ngModel)]="property.price" name="price" id="price" class="form-control"
+                max="1000000" min="500" required #price="ngModel">
+              <div *ngIf="price.invalid && (price.dirty || price.touched)" class="alert">
+                <div *ngIf="price.errors?.['required']" style="color :red;"> Price is required. </div>
+                <div *ngIf="price.errors?.['min']" style="color :red;"> Price must be at least 500. </div>
+                <div *ngIf="price.errors?.['max']" style="color :red;"> Price must be not exceed 1,000,000. </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="availability">Availability (*)</label>
+              <!-- <input type="text" [(ngModel)]="property.availability" name="availability" id="availability" class="form-control" required> -->
+              <select [(ngModel)]="property.availability" name="availability" id="availability" class="form-control"
+                required>
+                <option value="1" selected>Available</option>
+                <option value="0">Not Available</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="description">Description (*)</label>
+              <textarea type="text" [(ngModel)]="property.description" name="description" id="description"
+                class="form-control" maxlength="2000" minlength="5" #description="ngModel" required></textarea>
+              <input type="hidden" [(ngModel)]="property.description" name="description" id="description"
+                class="form-control" maxlength="2000" minlength="5" required #description="ngModel">
+
+              <div *ngIf="description.invalid && (description.dirty || description.touched)" class="alert">
+                <div *ngIf="description.errors?.['required']" style="color :red;"> Description is required. </div>
+                <div *ngIf="description.errors?.['minlength']" style="color :red;"> Description must be at least 5 characters long. </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-default" id="close-form" data-dismiss="modal" value="Cancel">
+            <div *ngIf="mode == 'add'">
+              <input [disabled]="propertyForm.invalid" (click)="onAddProperty(propertyForm)" type="submit"
+                class="btn btn-success" value="Add">
+            </div>
+            <div *ngIf="mode == 'edit'">
+              <input [disabled]="propertyForm.invalid" (click)="onUpdateProperty(property)" type="submit"
+                class="btn btn-success" value="Submit">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Delete Modal HTML -->
+  <div id="deleteModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form>
+          <div class="modal-header">
+            <h4 class="modal-title">Delete Employee</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete {{property.propertyName}}?</p>
+            <p class="text-warning"><small>This action cannot be undone.</small></p>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-default" id="close-forms" data-dismiss="modal" value="Cancel">
+            <input type="submit" class="btn btn-danger" value="Delete" (click)="onDeleteProperty(id)">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Make Unavailable Modal HTML -->
+  <!-- <div id="makeUnavailableModal" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form>
+          <div class="modal-header">
+            <h4 class="modal-title">Occupy Property?</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure this property will be occupied?</p>
+            <p class="text-warning"><small>This action cannot be undone.</small></p>
+          </div>
+          <div class="modal-footer">
+            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+            <input type="submit" class="btn btn-danger" value="Delete" (onclick)="myFunction(propertyId)">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div> -->
+</section>
+<!--/ Property Grid End /-->
